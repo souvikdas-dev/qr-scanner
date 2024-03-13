@@ -26,7 +26,14 @@ import { Html5QrcodeScanner } from "html5-qrcode";
 
 let html5QrcodeScanner = new Html5QrcodeScanner(
   "reader",
-  { fps: 1, qrbox: { width: 250, height: 250 } },
+  {
+    fps: 40,
+    qrbox: { width: 250, height: 250 },
+    // rememberLastUsedCamera: true,
+    // showTorchButtonIfSupported: true,
+    // showZoomSliderIfSupported: true,
+    defaultZoomValueIfSupported: 3,
+  },
   /* verbose= */ false
 );
 
@@ -34,9 +41,11 @@ function onScanSuccess(decodedText, decodedResult) {
   // handle the scanned code as you like, for example:
   console.log(`Code matched = ${decodedText}`, decodedResult);
 
-  html5QrcodeScanner.pause();
+  html5QrcodeScanner.pause(true);
 
-  document.querySelector("#html5-qrcode-button-camera-output").innerHTML = `<a href="${decodedText}">${decodedText}</a>`;
+  document.querySelector(
+    "#html5-qrcode-button-camera-output"
+  ).innerHTML = `<a href="${decodedText}">${decodedText}</a>`;
   document.querySelector("#html5-qrcode-button-camera-resume").style.display =
     "inline-block";
 }
@@ -50,7 +59,7 @@ function resumeSacn() {
 function onScanFailure(error) {
   // handle scan failure, usually better to ignore and keep scanning.
   // for example:
-  console.warn(`Code scan error = ${error}`);
+  // console.warn(`Code scan error = ${error}`);
 }
 
 html5QrcodeScanner.render(onScanSuccess, onScanFailure);
